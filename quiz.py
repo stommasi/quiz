@@ -32,15 +32,18 @@ def unindent(text):
     m = re.match(r'^\s+', text)
     return re.sub(r'(^|\n)' + m.group(), r'\1', text)
 
-def load_file(filename):
-    pattern = re.compile(r'^[^\s#]')
+def load_file(filename, sections):
+    pattern = re.compile(r'^\S')
+    s = 0
     with open(filename, 'r') as f:
         qlist = []
         question = ''
         answer = ''
         for line in f:
-            if pattern.match(line):
-                if question and answer:
+            if line.startswith("#"):
+                s += 1
+            elif pattern.match(line):
+                if question and answer and (not sections or s in sections):
                    qlist.append((question, unindent(answer)))
  
                 question = line
@@ -62,11 +65,17 @@ def list_sections(filename):
 
 if __name__ == "__main__":
     parser = ArgumentParser()
-    parser.add_argument("filename")
     parser.add_argument("-l", action="store_true")
+    parser.add_argument("-s")
+    parser.add_argument("filename")
     args = parser.parse_args()
+
+    sections = args.s or None
+    if sections:
+        sections = [int(n) for n in sections.split(',')]
+
     if args.l:
         list_sections(args.filename)
     else:
-        qlist = load_file(args.filename)
+        qlist = load_file(args.filename, sections)
         quiz_user(qlist)
