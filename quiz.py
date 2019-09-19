@@ -33,7 +33,7 @@ def unindent(text):
     return re.sub(r'(^|\n)' + m.group(), r'\1', text)
 
 def load_file(filename):
-    pattern = re.compile(r'^\S')
+    pattern = re.compile(r'^[^\s#]')
     with open(filename, 'r') as f:
         qlist = []
         question = ''
@@ -49,10 +49,24 @@ def load_file(filename):
                 answer += line
     return qlist
 
+def list_sections(filename):
+    pattern = re.compile(r'^#\s*')
+    c = 0
+    print("")
+    with open(filename, 'r') as f:
+        for line in f:
+            m = pattern.match(line)
+            if m:
+                c += 1
+                print(re.sub(m.group(), str(c) + ' - ', line))
+
 if __name__ == "__main__":
     parser = ArgumentParser()
-    parser.add_argument('filename')
+    parser.add_argument("filename")
+    parser.add_argument("-l", action="store_true")
     args = parser.parse_args()
-
-    qlist = load_file(args.filename)
-    quiz_user(qlist)
+    if args.l:
+        list_sections(args.filename)
+    else:
+        qlist = load_file(args.filename)
+        quiz_user(qlist)
