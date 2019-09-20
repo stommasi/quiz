@@ -7,6 +7,13 @@ import random
 import sys
 from argparse import ArgumentParser
 
+def get_input():
+    try:
+        return input()
+    except (KeyboardInterrupt, EOFError):
+        print("")
+        sys.exit(1)
+
 def quiz_user(qlist):
     while qlist:
         total = len(qlist)
@@ -17,11 +24,7 @@ def quiz_user(qlist):
 
         user_answer = ''
         while True:
-            try:
-                line = input()
-            except (KeyboardInterrupt, EOFError):
-                print("")
-                sys.exit(1)
+            line = get_input()
             if line == '':
                 break
             else:
