@@ -4,6 +4,7 @@
 
 import re
 import random
+import sys
 from argparse import ArgumentParser
 
 def quiz_user(qlist):
@@ -16,7 +17,11 @@ def quiz_user(qlist):
 
         user_answer = ''
         while True:
-            line = input()
+            try:
+                line = input()
+            except (KeyboardInterrupt, EOFError):
+                print("")
+                sys.exit(1)
             if line == '':
                 break
             else:
