@@ -33,7 +33,7 @@ def quiz_user(qlist):
         if ' '.join(user_answer.split()) == ' '.join(answer.split()):
             del qlist[i]
 
-        print(answer)
+        print(unindent(answer))
 
 def unindent(text):
     text = text.rstrip()
@@ -41,23 +41,20 @@ def unindent(text):
     return re.sub(r'(^|\n)' + m.group(), r'\1', text)
 
 def load_file(filename, sections):
-    pattern = re.compile(r'^\S')
+    q = re.compile(r'^\S')
+    a = re.compile(r'^\s+\S+')
     s = 0
     with open(filename, 'r') as f:
         qlist = []
-        question = ''
-        answer = ''
         for line in f:
             if line.startswith("#"):
                 s += 1
-            elif pattern.match(line):
-                if question and answer and (not sections or s in sections):
-                   qlist.append((question, unindent(answer)))
- 
-                question = line
-                answer = ''
-            else:
-                answer += line
+            elif not sections or s in sections:
+                if q.match(line):
+                    qlist.append([line, ''])
+                elif a.match(line):
+                    qlist[-1][1] += line
+
     return qlist
 
 def list_sections(filename):
