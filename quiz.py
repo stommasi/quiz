@@ -28,7 +28,7 @@ def quiz_user(qlist):
             if line == '':
                 break
             else:
-                user_answer += line
+                user_answer += line + "\n"
 
         if ' '.join(user_answer.split()) == ' '.join(answer.split()):
             del qlist[i]
