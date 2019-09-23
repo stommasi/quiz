@@ -61,15 +61,14 @@ def load_file(filename, sections):
     return qlist
 
 def list_sections(filename):
-    pattern = re.compile(r'^#\s*')
-    c = 0
-    print("")
+    pattern = re.compile(r'^#\s*(\S.*)$')
+    l = []
     with open(filename, 'r') as f:
         for line in f:
             m = pattern.match(line)
             if m:
-                c += 1
-                print(re.sub(m.group(), str(c) + ' - ', line))
+                l.append(m.group(1))
+        return l
 
 if __name__ == "__main__":
     parser = ArgumentParser()
@@ -83,7 +82,8 @@ if __name__ == "__main__":
         sections = [int(n) for n in sections.split(',')]
 
     if args.l:
-        list_sections(args.filename)
+        for i, s in enumerate(list_sections(args.filename)):
+            print(i + 1, s)
     else:
         qlist = load_file(args.filename, sections)
         quiz_user(qlist)
