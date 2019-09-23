@@ -8,10 +8,8 @@ from argparse import ArgumentParser
 
 def quiz_user(qlist):
     while qlist:
-        total = len(qlist)
-        i = randrange(0, total)
-        question, answer = qlist[i]
-        print("\n{}\n".format(total))
+        question, answer, i = get_random(qlist)
+        print("\n{}\n".format(len(qlist)))
         print(question)
 
         user_answer = ''
@@ -67,6 +65,11 @@ def unindent(text):
     text = text.rstrip()
     m = re.match(r'^\s+', text)
     return re.sub(r'(^|\n)' + m.group(), r'\1', text)
+
+def get_random(qlist):
+    i = randrange(0, len(qlist))
+    question, answer = qlist[i]
+    return (question, answer, i)
 
 if __name__ == "__main__":
     parser = ArgumentParser()
