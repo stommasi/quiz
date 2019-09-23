@@ -14,6 +14,9 @@ def get_input():
         print("")
         sys.exit(1)
 
+def answers_equal(user_answer, answer):
+    return ' '.join(user_answer.split()) == ' '.join(answer.split())
+
 def quiz_user(qlist):
     while qlist:
         total = len(qlist)
@@ -30,7 +33,7 @@ def quiz_user(qlist):
             else:
                 user_answer += line + "\n"
 
-        if ' '.join(user_answer.split()) == ' '.join(answer.split()):
+        if answers_equal(user_answer, answer):
             del qlist[i]
 
         print(unindent(answer))
