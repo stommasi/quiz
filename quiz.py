@@ -2,25 +2,14 @@
 
 # Quiz
 
-import re
-import random
-import sys
+import re, sys
+from random import randrange
 from argparse import ArgumentParser
-
-def get_input():
-    try:
-        return input()
-    except (KeyboardInterrupt, EOFError):
-        print("")
-        sys.exit(1)
-
-def answers_equal(user_answer, answer):
-    return ' '.join(user_answer.split()) == ' '.join(answer.split())
 
 def quiz_user(qlist):
     while qlist:
         total = len(qlist)
-        i = random.randrange(0, total)
+        i = randrange(0, total)
         question, answer = qlist[i]
         print("\n{}\n".format(total))
         print(question)
@@ -38,10 +27,12 @@ def quiz_user(qlist):
 
         print(unindent(answer))
 
-def unindent(text):
-    text = text.rstrip()
-    m = re.match(r'^\s+', text)
-    return re.sub(r'(^|\n)' + m.group(), r'\1', text)
+def get_input():
+    try:
+        return input()
+    except (KeyboardInterrupt, EOFError):
+        print("")
+        sys.exit(1)
 
 def load_file(filename, sections):
     q = re.compile(r'^\S')
@@ -57,7 +48,6 @@ def load_file(filename, sections):
                     qlist.append([line, ''])
                 elif a.match(line):
                     qlist[-1][1] += line
-
     return qlist
 
 def list_sections(filename):
@@ -69,6 +59,14 @@ def list_sections(filename):
             if m:
                 l.append(m.group(1))
         return l
+
+def answers_equal(user_answer, answer):
+    return ' '.join(user_answer.split()) == ' '.join(answer.split())
+
+def unindent(text):
+    text = text.rstrip()
+    m = re.match(r'^\s+', text)
+    return re.sub(r'(^|\n)' + m.group(), r'\1', text)
 
 if __name__ == "__main__":
     parser = ArgumentParser()
